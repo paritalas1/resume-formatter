@@ -3,200 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional ATS Resume Formatter</title>
+    <title>ATS Resume Formatter - Professional</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 420px 1fr;
-            gap: 2rem;
-        }
-
-        .panel {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        }
-
-        h1 {
-            font-size: 1.75rem;
-            margin-bottom: 0.5rem;
-            color: #1a1a1a;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .templates {
-            display: grid;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .template-card {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .template-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .template-card.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            border-color: #667eea;
-        }
-
-        .template-name {
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 0.25rem;
-        }
-
-        .template-desc {
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 350px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            resize: vertical;
-            margin-bottom: 1rem;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        button {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-bottom: 0.75rem;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        button.success {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-        }
-
-        #preview {
-            background: white;
-            padding: 3rem 2.5rem;
-            border-radius: 8px;
-            min-height: 700px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .debug {
-            background: #1a1a1a;
-            color: #00ff00;
-            border-radius: 8px;
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.75rem;
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: 1rem;
-            white-space: pre-wrap;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #999;
-            padding: 4rem 2rem;
-            font-size: 1.1rem;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 2rem; }
+        .container { max-width: 1600px; margin: 0 auto; display: grid; grid-template-columns: 420px 1fr; gap: 2rem; }
+        .panel { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+        h1 { font-size: 1.75rem; margin-bottom: 0.5rem; color: #1a1a1a; }
+        .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .templates { display: grid; gap: 0.75rem; margin-bottom: 1.5rem; }
+        .template-card { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.2s; }
+        .template-card:hover { border-color: #667eea; transform: translateY(-2px); }
+        .template-card.active { background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border-color: #667eea; }
+        .template-name { font-weight: 700; color: #1a1a1a; margin-bottom: 0.25rem; }
+        .template-desc { font-size: 0.8rem; color: #666; }
+        textarea { width: 100%; min-height: 350px; border: 2px solid #e9ecef; border-radius: 10px; padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.85rem; resize: vertical; margin-bottom: 1rem; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        button { width: 100%; padding: 1rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-bottom: 0.75rem; transition: transform 0.2s; }
+        button:hover { transform: translateY(-2px); }
+        button.success { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        #preview { background: white; padding: 3rem 2.5rem; border-radius: 8px; min-height: 700px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .debug { background: #1a1a1a; color: #00ff00; border-radius: 8px; padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.75rem; max-height: 200px; overflow-y: auto; margin-top: 1rem; white-space: pre-wrap; }
+        .empty-state { text-align: center; color: #999; padding: 4rem 2rem; font-size: 1.1rem; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="panel">
             <h1>🎯 ATS Resume Formatter</h1>
-            <p class="subtitle">Professional • Templates • Perfect Parsing</p>
+            <p class="subtitle">All Templates • Perfect Parsing • 2-Page OK</p>
 
             <div class="templates">
                 <div class="template-card active" data-template="classic" data-color="2563eb">
                     <div class="template-name">Classic Blue</div>
-                    <div class="template-desc">Traditional centered header • Most ATS-friendly</div>
+                    <div class="template-desc">Traditional • Most ATS-friendly</div>
                 </div>
                 <div class="template-card" data-template="modern" data-color="059669">
                     <div class="template-name">Modern Green</div>
-                    <div class="template-desc">Split header layout • Tech/creative</div>
+                    <div class="template-desc">Split header • Tech/creative</div>
                 </div>
                 <div class="template-card" data-template="executive" data-color="1e293b">
                     <div class="template-name">Executive Dark</div>
-                    <div class="template-desc">Bold dark header • Senior leadership</div>
+                    <div class="template-desc">Dark header • Leadership</div>
                 </div>
                 <div class="template-card" data-template="minimal" data-color="dc2626">
                     <div class="template-name">Minimal Red</div>
-                    <div class="template-desc">Clean accent bar • Design roles</div>
+                    <div class="template-desc">Clean bar • Design roles</div>
                 </div>
                 <div class="template-card" data-template="creative" data-color="7c3aed">
                     <div class="template-name">Creative Purple</div>
-                    <div class="template-desc">Bold centered • Creative portfolios</div>
+                    <div class="template-desc">Bold centered • Portfolios</div>
                 </div>
             </div>
 
-            <textarea id="input" placeholder="Paste your resume text here...
-
-Example:
-
-SAI TEJA PARITALA
-New Jersey | email@example.com
-
-PROFESSIONAL SUMMARY
-Systems Administrator with 4+ years...
-
-PROFESSIONAL EXPERIENCE
-
-Systems Administrator
-TD Bank · Cherry Hill, NJ | Feb 2025 – Present
-• Achievement 1
-• Achievement 2
-
-TECHNICAL SKILLS
-Salesforce: Sales Cloud, Service Cloud...
-
-CERTIFICATIONS & ACHIEVEMENTS
-• Salesforce Certified Administrator
-• Platform Developer I"></textarea>
+            <textarea id="input" placeholder="Paste your resume here..."></textarea>
 
             <button onclick="format()">🎨 Format Resume</button>
             <button class="success" onclick="download()">📥 Download .docx</button>
@@ -206,9 +66,7 @@ CERTIFICATIONS & ACHIEVEMENTS
 
         <div class="panel">
             <div id="preview">
-                <div class="empty-state">
-                    <p>👈 Paste your resume and click "Format Resume"</p>
-                </div>
+                <div class="empty-state">Paste resume → Format → Download</div>
             </div>
         </div>
     </div>
@@ -236,7 +94,7 @@ CERTIFICATIONS & ACHIEVEMENTS
         }
 
         function parseResume(text) {
-            log('🔍 Parsing resume...');
+            log('🔍 Starting parse...');
             const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l);
             
             const resume = {
@@ -251,23 +109,27 @@ CERTIFICATIONS & ACHIEVEMENTS
 
             let section = null;
             let job = null;
+            let i = 0;
 
-            for (let i = 0; i < lines.length; i++) {
+            while (i < lines.length) {
                 const line = lines[i];
                 const upper = line.toUpperCase();
                 const next = lines[i + 1] || '';
+                const nextUpper = next.toUpperCase();
 
-                // Name
-                if (!resume.name && !line.includes('@') && !line.includes('+1') && !line.includes('·') && !line.includes('|')) {
+                // Name (first bold-looking line)
+                if (!resume.name && !line.includes('@') && !line.includes('+1')) {
                     resume.name = line;
                     log(`✓ Name: ${line}`);
+                    i++;
                     continue;
                 }
 
                 // Contact
-                if (!resume.contact && (line.includes('@') || line.includes('+1') || (line.includes('·') && (line.includes('|') || i < 5)))) {
+                if (!resume.contact && (line.includes('@') || line.includes('+1'))) {
                     resume.contact = line;
-                    log(`✓ Contact: ${line}`);
+                    log(`✓ Contact: ${line.substring(0, 50)}...`);
+                    i++;
                     continue;
                 }
 
@@ -275,71 +137,109 @@ CERTIFICATIONS & ACHIEVEMENTS
                 if (upper.includes('PROFESSIONAL SUMMARY') || upper === 'SUMMARY') {
                     section = 'summary';
                     job = null;
-                    log('📌 SUMMARY section');
+                    log('📌 SUMMARY');
+                    i++;
+                    continue;
+                }
+
+                if (upper.includes('CORE COMPETENCIES') || upper.includes('KEY SKILLS')) {
+                    section = 'core';
+                    job = null;
+                    log('📌 CORE COMPETENCIES (adding to summary)');
+                    i++;
                     continue;
                 }
 
                 if (upper.includes('PROFESSIONAL EXPERIENCE') || upper === 'EXPERIENCE') {
                     section = 'experience';
                     job = null;
-                    log('📌 EXPERIENCE section');
+                    log('📌 EXPERIENCE');
+                    i++;
                     continue;
                 }
 
                 if (upper.includes('TECHNICAL SKILLS') || upper === 'SKILLS') {
                     section = 'skills';
                     job = null;
-                    log('📌 SKILLS section');
+                    log('📌 SKILLS');
+                    i++;
                     continue;
                 }
 
                 if (upper.includes('CERTIFICATIONS') || upper.includes('ACHIEVEMENTS')) {
                     section = 'certifications';
                     job = null;
-                    log('📌 CERTIFICATIONS section');
+                    log('📌 CERTIFICATIONS');
+                    i++;
                     continue;
                 }
 
                 if (upper === 'EDUCATION') {
                     section = 'education';
                     job = null;
-                    log('📌 EDUCATION section');
+                    log('📌 EDUCATION');
+                    i++;
                     continue;
                 }
 
                 // Content
-                if (section === 'summary' && !line.startsWith('•')) {
+                if (section === 'summary' && !line.startsWith('•') && !line.startsWith('-')) {
+                    resume.summary.push(line);
+                }
+
+                if (section === 'core' && !line.startsWith('•') && !upper.includes('COMPETENCIES')) {
                     resume.summary.push(line);
                 }
 
                 if (section === 'experience') {
-                    const isTitle = !line.startsWith('•') && !line.includes('·') && !line.includes('|') && 
-                                   next && (next.includes('·') || next.includes('|'));
+                    // NEW: Detect job by looking for date pattern in SAME line or NEXT line
+                    const hasDateInLine = /20\d{2}/.test(line) || /Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/.test(line);
+                    const hasDateInNext = /20\d{2}/.test(next) || /Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/.test(next);
+                    const looksLikeJobTitle = !line.startsWith('•') && !line.startsWith('-') && line.length > 10 && line.length < 150;
                     
-                    if (isTitle) {
+                    // Job title with dates IN the same line (e.g., "GTM AI Engineer	Feb 2025 – Present")
+                    if (looksLikeJobTitle && hasDateInLine && !hasDateInNext) {
                         if (job) {
                             resume.experience.push(job);
                             log(`  ✓ Saved: ${job.title} (${job.bullets.length} bullets)`);
                         }
                         job = { title: line, raw: '', bullets: [] };
-                        log(`  → New job: ${line}`);
-                    } else if (job && (line.includes('·') || line.includes('|')) && !line.startsWith('•')) {
-                        job.raw = line;
-                        log(`    Raw: ${line.substring(0, 50)}...`);
-                    } else if (line.startsWith('•') && job) {
-                        job.bullets.push(line.substring(1).trim());
+                        log(`  → Job (inline date): ${line.substring(0, 60)}...`);
+                        i++;
+                        continue;
+                    }
+                    
+                    // Job title followed by company/date line
+                    if (looksLikeJobTitle && hasDateInNext && !hasDateInLine) {
+                        if (job) {
+                            resume.experience.push(job);
+                            log(`  ✓ Saved: ${job.title} (${job.bullets.length} bullets)`);
+                        }
+                        job = { title: line, raw: next, bullets: [] };
+                        log(`  → Job (split): ${line.substring(0, 40)}...`);
+                        log(`    Raw: ${next.substring(0, 50)}...`);
+                        i += 2; // Skip next line since we consumed it
+                        continue;
+                    }
+                    
+                    // Bullet point
+                    if ((line.startsWith('•') || line.startsWith('-')) && job) {
+                        const bullet = line.replace(/^[•\-]\s*/, '');
+                        job.bullets.push(bullet);
                     }
                 }
 
-                if (section === 'skills' && line.includes(':')) {
-                    const [cat, items] = line.split(':');
-                    resume.skills.push({ category: cat.trim(), items: items.trim() });
+                if (section === 'skills') {
+                    if (line.includes(':')) {
+                        const [cat, items] = line.split(':');
+                        resume.skills.push({ category: cat.trim().replace(/\*\*/g, ''), items: items.trim() });
+                    }
                 }
 
                 if (section === 'certifications') {
-                    if (line.startsWith('•')) {
-                        resume.certifications.push(line.substring(1).trim());
-                    } else if (!upper.includes('CERTIFICATION')) {
+                    if (line.startsWith('•') || line.startsWith('-')) {
+                        resume.certifications.push(line.replace(/^[•\-]\s*/, ''));
+                    } else if (!upper.includes('CERTIFICATION') && !upper.includes('ACHIEVEMENT')) {
                         resume.certifications.push(line);
                     }
                 }
@@ -347,150 +247,78 @@ CERTIFICATIONS & ACHIEVEMENTS
                 if (section === 'education' && !upper.includes('EDUCATION')) {
                     resume.education.push(line);
                 }
+
+                i++;
             }
 
+            // Save last job
             if (job) {
                 resume.experience.push(job);
                 log(`  ✓ Saved: ${job.title} (${job.bullets.length} bullets)`);
             }
 
-            log(`\n✅ Complete: ${resume.experience.length} jobs | ${resume.certifications.length} certs | ${resume.skills.length} skills`);
+            log(`\n✅ COMPLETE:`);
+            log(`   Experience: ${resume.experience.length} jobs`);
+            log(`   Certifications: ${resume.certifications.length}`);
+            log(`   Skills: ${resume.skills.length}`);
+
             return resume;
         }
 
         function renderPreview() {
-            const templates = {
-                classic: generateClassic,
-                modern: generateModern,
-                executive: generateExecutive,
-                minimal: generateMinimal,
-                creative: generateCreative
-            };
-
-            document.getElementById('preview').innerHTML = templates[currentTemplate](parsedResume, currentColor);
-        }
-
-        function generateClassic(r, color) {
+            const color = currentColor;
             let html = '<div style="font-family: Calibri, Arial, sans-serif;">';
             
-            if (r.name) {
-                html += `<div style="text-align: center; font-size: 26pt; font-weight: 700; color: #1e293b; margin-bottom: 8pt;">${r.name}</div>`;
+            if (parsedResume.name) {
+                html += `<div style="text-align: center; font-size: 26pt; font-weight: 700; color: #1e293b; margin-bottom: 8pt;">${parsedResume.name}</div>`;
             }
             
-            if (r.contact) {
-                html += `<div style="text-align: center; font-size: 10pt; color: #64748b; padding-bottom: 12pt; border-bottom: 3pt solid #${color}; margin-bottom: 16pt;">${r.contact}</div>`;
+            if (parsedResume.contact) {
+                html += `<div style="text-align: center; font-size: 10pt; color: #64748b; padding-bottom: 12pt; border-bottom: 3pt solid #${color}; margin-bottom: 16pt;">${parsedResume.contact}</div>`;
             }
 
-            html += generateSections(r, color);
-            html += '</div>';
-            return html;
-        }
-
-        function generateModern(r, color) {
-            let html = '<div style="font-family: Calibri, Arial, sans-serif;">';
-            
-            if (r.name || r.contact) {
-                html += `<div style="display: flex; justify-content: space-between; padding-bottom: 12pt; border-bottom: 2pt solid #${color}; margin-bottom: 16pt;">`;
-                html += `<div><div style="font-size: 24pt; font-weight: 700; color: #1e293b;">${r.name || ''}</div></div>`;
-                html += `<div style="text-align: right; font-size: 9pt; color: #64748b;">${r.contact ? r.contact.split('|').join('<br>') : ''}</div>`;
-                html += `</div>`;
-            }
-
-            html += generateSections(r, color);
-            html += '</div>';
-            return html;
-        }
-
-        function generateExecutive(r, color) {
-            let html = '<div style="font-family: Calibri, Arial, sans-serif;">';
-            
-            if (r.name || r.contact) {
-                html += `<div style="background: linear-gradient(135deg, #1e293b, #334155); color: white; padding: 18pt; margin: -24pt -20pt 16pt -20pt; border-radius: 8px 8px 0 0;">`;
-                html += `<div style="font-size: 26pt; font-weight: 700; margin-bottom: 6pt;">${r.name || ''}</div>`;
-                html += `<div style="font-size: 10pt; opacity: 0.9;">${r.contact || ''}</div>`;
-                html += `</div>`;
-            }
-
-            html += generateSections(r, '1e293b');
-            html += '</div>';
-            return html;
-        }
-
-        function generateMinimal(r, color) {
-            let html = '<div style="font-family: Calibri, Arial, sans-serif;">';
-            
-            if (r.name || r.contact) {
-                html += `<div style="border-left: 6pt solid #${color}; padding-left: 12pt; margin-bottom: 16pt;">`;
-                html += `<div style="font-size: 24pt; font-weight: 700; color: #1e293b; margin-bottom: 4pt;">${r.name || ''}</div>`;
-                html += `<div style="font-size: 10pt; color: #64748b;">${r.contact ? r.contact.replace(/\|/g, '•') : ''}</div>`;
-                html += `</div>`;
-            }
-
-            html += generateSections(r, color);
-            html += '</div>';
-            return html;
-        }
-
-        function generateCreative(r, color) {
-            let html = '<div style="font-family: Calibri, Arial, sans-serif;">';
-            
-            if (r.name || r.contact) {
-                html += `<div style="text-align: center; margin-bottom: 16pt;">`;
-                html += `<div style="font-size: 28pt; font-weight: 700; color: #${color}; letter-spacing: 2pt; margin-bottom: 6pt;">${r.name ? r.name.toUpperCase() : ''}</div>`;
-                html += `<div style="font-size: 10pt; color: #64748b;">${r.contact || ''}</div>`;
-                html += `<div style="font-size: 11pt; color: #${color}; margin-top: 6pt;">★ Professional ★</div>`;
-                html += `</div>`;
-            }
-
-            html += generateSections(r, color);
-            html += '</div>';
-            return html;
-        }
-
-        function generateSections(r, color) {
-            let html = '';
-
-            if (r.summary?.length) {
+            if (parsedResume.summary?.length) {
                 html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 14pt; padding-bottom: 4pt; border-bottom: 2pt solid #${color}; margin-bottom: 8pt;">PROFESSIONAL SUMMARY</div>`;
-                r.summary.forEach(s => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 6pt; line-height: 1.4;">${s}</div>`);
+                parsedResume.summary.forEach(s => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 6pt; line-height: 1.4;">${s}</div>`);
             }
 
-            if (r.education?.length) {
+            if (parsedResume.education?.length) {
                 html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 14pt; padding-bottom: 4pt; border-bottom: 2pt solid #${color}; margin-bottom: 8pt;">EDUCATION</div>`;
-                r.education.forEach(e => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt;">${e}</div>`);
+                parsedResume.education.forEach(e => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt;">${e}</div>`);
             }
 
-            if (r.skills?.length) {
+            if (parsedResume.skills?.length) {
                 html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 14pt; padding-bottom: 4pt; border-bottom: 2pt solid #${color}; margin-bottom: 8pt;">TECHNICAL SKILLS</div>`;
-                r.skills.forEach(s => {
+                parsedResume.skills.forEach(s => {
                     html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 6pt;">`;
                     if (s.category) html += `<strong>${s.category}:</strong> `;
                     html += `${s.items}</div>`;
                 });
             }
 
-            if (r.experience?.length) {
+            if (parsedResume.experience?.length) {
                 html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 14pt; padding-bottom: 4pt; border-bottom: 2pt solid #${color}; margin-bottom: 8pt;">PROFESSIONAL EXPERIENCE</div>`;
-                r.experience.forEach(job => {
+                parsedResume.experience.forEach(job => {
                     html += `<div style="margin-top: 10pt;">`;
                     html += `<div style="font-weight: 700; font-size: 10pt; color: #1e293b;">${job.title}</div>`;
-                    html += `<div style="font-style: italic; font-size: 10pt; color: #64748b; margin-bottom: 4pt;">${job.raw}</div>`;
+                    if (job.raw) html += `<div style="font-style: italic; font-size: 10pt; color: #64748b; margin-bottom: 4pt;">${job.raw}</div>`;
                     job.bullets.forEach(b => html += `<div style="margin-left: 14pt; margin-bottom: 4pt; font-size: 10pt; color: #334155;">• ${b}</div>`);
                     html += `</div>`;
                 });
             }
 
-            if (r.certifications?.length) {
+            if (parsedResume.certifications?.length) {
                 html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 14pt; padding-bottom: 4pt; border-bottom: 2pt solid #${color}; margin-bottom: 8pt;">CERTIFICATIONS & ACHIEVEMENTS</div>`;
-                r.certifications.forEach(c => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt;">• ${c}</div>`);
+                parsedResume.certifications.forEach(c => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt;">• ${c}</div>`);
             }
 
-            return html;
+            html += '</div>';
+            document.getElementById('preview').innerHTML = html;
         }
 
         function format() {
             const text = document.getElementById('input').value;
-            if (!text.trim()) return alert('Please paste your resume first');
+            if (!text.trim()) return alert('Paste resume first');
             
             document.getElementById('debug').textContent = '';
             parsedResume = parseResume(text);
@@ -498,10 +326,10 @@ CERTIFICATIONS & ACHIEVEMENTS
         }
 
         async function download() {
-            if (!parsedResume) return alert('Please format resume first');
+            if (!parsedResume) return alert('Format resume first');
 
             try {
-                log('\n📤 Sending to server...');
+                log(`\n📤 Sending to server (template: ${currentTemplate})...`);
                 
                 const response = await fetch('/generate-docx', {
                     method: 'POST',
@@ -522,7 +350,7 @@ CERTIFICATIONS & ACHIEVEMENTS
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `${parsedResume.name || 'Resume'}.docx`;
+                a.download = `${parsedResume.name || 'Resume'}_${currentTemplate}.docx`;
                 a.click();
                 URL.revokeObjectURL(url);
                 
@@ -533,7 +361,6 @@ CERTIFICATIONS & ACHIEVEMENTS
             }
         }
 
-        // Auto-save
         document.getElementById('input').addEventListener('input', e => {
             localStorage.setItem('resume-draft', e.target.value);
         });
