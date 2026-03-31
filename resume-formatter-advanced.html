@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional ATS Resume Formatter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0d0d12;
+            --bg-secondary: #16161d;
+            --bg-tertiary: #1e1e28;
+            --border-subtle: #2a2a38;
+            --border-active: #4a4a5e;
+            --text-primary: #e8e8f0;
+            --text-secondary: #a8a8c0;
+            --text-tertiary: #6a6a88;
+            --accent-blue: #5b8ff9;
+            --accent-purple: #8b7fff;
+            --accent-green: #5ed9a1;
+            --accent-amber: #f5a623;
+            --surface-glass: rgba(255, 255, 255, 0.03);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(91, 143, 249, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 127, 255, 0.05) 0%, transparent 50%);
+        }
+
+        .top-bar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            background: var(--surface-glass);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 2rem;
+            min-height: calc(100vh - 100px);
+        }
+
+        @media (max-width: 1400px) {
+            .container {
+                grid-template-columns: 380px 1fr;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .panel:hover {
+            border-color: var(--border-active);
+        }
+
+        .panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .panel-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+        .panel-body {
+            padding: 1.5rem;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .template-card {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .template-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .template-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .template-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .template-card.active {
+            border-color: var(--accent-blue);
+            background: linear-gradient(135deg, rgba(91, 143, 249, 0.1) 0%, rgba(139, 127, 255, 0.1) 100%);
+        }
+
+        .template-card.active::before {
+            transform: scaleX(1);
+        }
+
+        .template-preview {
+            width: 100%;
+            height: 140px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .template-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .template-desc {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            line-height: 1.4;
+        }
+
+        .template-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--accent-green);
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 600;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 400px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.25rem;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(91, 143, 249, 0.1);
+        }
+
+        textarea::placeholder {
+            color: var(--text-tertiary);
+            opacity: 0.5;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(91, 143, 249, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+        }
+
+        button.secondary:hover {
+            background: var(--surface-glass);
+            border-color: var(--border-active);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        button.success {
+            background: linear-gradient(135deg, var(--accent-green) 0%, #4bc98f 100%);
+        }
+
+        button.success:hover {
+            box-shadow: 0 8px 24px rgba(94, 217, 161, 0.4);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .preview-panel {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-toolbar {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-tertiary);
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .zoom-btn {
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            min-width: auto;
+            flex: none;
+        }
+
+        .zoom-btn:hover {
+            background: var(--surface-glass);
+            color: var(--text-primary);
+            transform: none;
+        }
+
+        .zoom-level {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .preview-container {
+            flex: 1;
+            overflow: auto;
+            padding: 2rem;
+            background: #1a1a24;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .preview-container::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .preview-container::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        .preview-container::-webkit-scrollbar-thumb {
+            background: var(--border-active);
+            border-radius: 4px;
+        }
+
+        #resume-preview {
+            background: white;
+            color: #000;
+            min-height: 11in;
+            width: 8.5in;
+            padding: 0.75in;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            transform-origin: top center;
+            transition: transform 0.3s;
+            font-family: 'Calibri', Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        .empty-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--accent-green) 0%, #4bc98f 100%);
+            color: #000;
+            padding: 1.25rem 1.75rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(94, 217, 161, 0.4);
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .loader {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        button.loading .loader {
+            display: block;
+        }
+
+        button.loading .btn-text {
+            display: none;
+        }
+
+        /* Template-specific preview styles */
+        .t1-header {
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #2563eb;
+            margin-bottom: 16px;
+        }
+
+        .t1-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+
+        .t1-contact {
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        .t2-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #059669;
+            margin-bottom: 16px;
+        }
+
+        .t2-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .t2-contact {
+            text-align: right;
+            font-size: 9px;
+            color: #64748b;
+        }
+
+        .t3-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 16px;
+            margin: -12px -12px 16px -12px;
+        }
+
+        .t3-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .t3-contact {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+
+        .t4-header {
+            border-left: 6px solid #dc2626;
+            padding-left: 12px;
+            margin-bottom: 16px;
+        }
+
+        .t4-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .t4-contact {
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        .t5-header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .t5-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 4px;
+        }
+
+        .t5-contact {
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            text-transform: uppercase;
+            margin: 14px 0 8px 0;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #2563eb;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0 4px 0;
+        }
+
+        .company {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 11px;
+        }
+
+        .dates {
+            color: #64748b;
+            font-size: 10px;
+        }
+
+        .preview-bullet {
+            margin: 3px 0 3px 16px;
+            font-size: 10px;
+            color: #334155;
+            line-height: 1.4;
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, rgba(91, 143, 249, 0.08) 0%, rgba(139, 127, 255, 0.08) 100%);
+            border: 1px solid rgba(91, 143, 249, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .instructions-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .instructions ol {
+            margin-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin: 0.5rem 0;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--surface-glass);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo">
+            <div class="logo-icon">R</div>
+            <div class="logo-text">
+                <h1>Resume Forge</h1>
+                <p>ATS-Optimized • Enterprise Grade</p>
+            </div>
+        </div>
+        <div class="top-actions">
+            <div class="badge">
+                <div class="badge-dot"></div>
+                <span>Ready to Export</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M9 21V9"/>
+                        </svg>
+                        Choose Template
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="template-grid" id="template-grid">
+                        <div class="template-card active" data-template="classic">
+                            <div class="template-preview">
+                                <div class="t1-header">
+                                    <div class="t1-name">John Doe</div>
+                                    <div class="t1-contact">email@example.com | (123) 456-7890</div>
+                                </div>
+                                <div class="section-title">Experience</div>
+                                <div class="job-header">
+                                    <div class="company">Company Name</div>
+                                    <div class="dates">2020 - Present</div>
+                                </div>
+                                <div class="preview-bullet">• Achievement with metrics</div>
+                                <div class="template-badge">Popular</div>
+                            </div>
+                            <div class="template-name">Classic Blue</div>
+                            <div class="template-desc">Traditional centered header with blue accents. Best for corporate roles.</div>
+                        </div>
+
+                        <div class="template-card" data-template="modern">
+                            <div class="template-preview">
+                                <div class="t2-header">
+                                    <div>
+                                        <div class="t2-name">John Doe</div>
+                                        <div style="font-size: 9px; color: #059669;">Senior Developer</div>
+                                    </div>
+                                    <div class="t2-contact">
+                                        email@example.com<br>(123) 456-7890
+                                    </div>
+                                </div>
+                                <div class="section-title" style="border-bottom-color: #059669;">Experience</div>
+                                <div class="job-header">
+                                    <div class="company">Company</div>
+                                    <div class="dates">2020 - Present</div>
+                                </div>
+                            </div>
+                            <div class="template-name">Modern Green</div>
+                            <div class="template-desc">Split header layout with green accents. Great for tech and creative fields.</div>
+                        </div>
+
+                        <div class="template-card" data-template="executive">
+                            <div class="template-preview">
+                                <div class="t3-header">
+                                    <div class="t3-name">John Doe</div>
+                                    <div class="t3-contact">email@example.com | (123) 456-7890 | LinkedIn</div>
+                                </div>
+                                <div class="section-title" style="border-bottom-color: #1e293b;">Professional Summary</div>
+                                <div style="font-size: 9px; color: #334155; margin: 6px 0;">Experienced professional with proven track record...</div>
+                            </div>
+                            <div class="template-name">Executive Dark</div>
+                            <div class="template-desc">Bold header with dark background. Perfect for senior leadership positions.</div>
+                        </div>
+
+                        <div class="template-card" data-template="minimal">
+                            <div class="template-preview">
+                                <div class="t4-header">
+                                    <div class="t4-name">John Doe</div>
+                                    <div class="t4-contact">email@example.com • (123) 456-7890 • City, State</div>
+                                </div>
+                                <div class="section-title" style="border-bottom-color: #dc2626;">Experience</div>
+                                <div class="job-header">
+                                    <div class="company">Company Name</div>
+                                    <div class="dates">2020 - Present</div>
+                                </div>
+                                <div class="preview-bullet">• Key achievement here</div>
+                            </div>
+                            <div class="template-name">Minimal Red</div>
+                            <div class="template-desc">Clean design with red accent bar. Ideal for design and creative roles.</div>
+                        </div>
+
+                        <div class="template-card" data-template="creative">
+                            <div class="template-preview">
+                                <div class="t5-header">
+                                    <div class="t5-name">JOHN DOE</div>
+                                    <div class="t5-contact">email@example.com | (123) 456-7890</div>
+                                    <div style="font-size: 9px; color: #7c3aed; margin-top: 4px;">★ Creative Professional ★</div>
+                                </div>
+                                <div class="section-title" style="border-bottom-color: #7c3aed;">Portfolio Highlights</div>
+                            </div>
+                            <div class="template-name">Creative Purple</div>
+                            <div class="template-desc">Bold centered design with purple theme. Best for creative portfolios.</div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid" style="margin-top: 1.5rem;">
+                        <div class="stat-card">
+                            <div class="stat-value" id="word-count">0</div>
+                            <div class="stat-label">Words</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="section-count">0</div>
+                            <div class="stat-label">Sections</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="bullet-count">0</div>
+                            <div class="stat-label">Bullets</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Resume Content
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="instructions">
+                        <div class="instructions-title">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                            How to Use
+                        </div>
+                        <ol>
+                            <li>Paste your resume text from Claude below</li>
+                            <li>Choose your preferred template style</li>
+                            <li>Preview updates automatically</li>
+                            <li>Download as professional .docx file</li>
+                        </ol>
+                    </div>
+
+                    <textarea id="resume-input" placeholder="Paste your resume here...
+
+Example format:
+
+SAI TEJA PARITALA
++1 (201) 710-1040 | saiteja.p1723@gmail.com | linkedin.com/in/saiteja
+
+PROFESSIONAL SUMMARY
+Experienced Salesforce Administrator with 4+ years building scalable solutions across Sales Cloud, Service Cloud, and Financial Services Cloud. Expert in Lightning Web Components, Flow automation, and API integrations.
+
+PROFESSIONAL EXPERIENCE
+
+TD Bank — Cherry Hill, NJ | February 2025 – Present
+Salesforce Administrator
+• Managed 500+ user Financial Services Cloud instance with custom profiles and permission sets
+• Built Lightning Web Components reducing manual tasks by 40%
+• Created 15+ executive dashboards tracking KPIs
+• Integrated SAP, Oracle, and DocuSign via REST APIs
+• Led 200+ stakeholder workshops increasing adoption 25%
+
+HCA Healthcare — Bangalore, India | November 2021 – July 2023
+Salesforce Developer
+• Developed Service Cloud solution for 1,000+ healthcare users
+• Built custom Lightning components improving productivity 35%
+• Implemented Einstein Analytics dashboards
+• Managed 100+ production deployments via Git/Jenkins
+
+TECHNICAL SKILLS
+Salesforce: Sales Cloud, Service Cloud, Financial Services Cloud, Lightning Web Components, Apex, Flows
+Integrations: REST APIs, SOAP, MuleSoft, Dell Boomi
+Tools: SFDX, Git, COPADO, JIRA, Postman
+
+CERTIFICATIONS
+• Salesforce Certified Administrator (ADM-201)
+• Salesforce Certified Platform Developer I (PDI)
+• Salesforce Certified App Builder
+
+EDUCATION
+Master of Science in Information Technology
+Montclair State University, Montclair, NJ | May 2025"></textarea>
+
+                    <div class="btn-group">
+                        <button onclick="formatResume()">
+                            <span class="btn-text">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Format Resume
+                            </span>
+                            <div class="loader"></div>
+                        </button>
+                        <button class="secondary" onclick="clearAll()">
+                            <span class="btn-text">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                                Clear
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="preview-panel">
+                <div class="preview-toolbar">
+                    <div class="panel-title">
+                        <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        Live Preview
+                    </div>
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoom('out')">−</button>
+                        <span class="zoom-level" id="zoom-level">100%</span>
+                        <button class="zoom-btn" onclick="zoom('in')">+</button>
+                    </div>
+                </div>
+                <div class="preview-container" id="preview-container">
+                    <div id="resume-preview">
+                        <div class="empty-preview">
+                            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                            <p>Your formatted resume will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="btn-group">
+                        <button class="success" onclick="downloadDOCX()">
+                            <span class="btn-text">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Download .docx
+                            </span>
+                            <div class="loader"></div>
+                        </button>
+                        <button class="secondary" onclick="copyHTML()">
+                            <span class="btn-text">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                Copy HTML
+                            </span>
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <span class="feature-tag">✓ ATS-Optimized</span>
+                        <span class="feature-tag">✓ No Tables</span>
+                        <span class="feature-tag">✓ Keyword Rich</span>
+                        <span class="feature-tag">✓ Clean Formatting</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span id="toast-message">Success!</span>
+    </div>
+
+    <script>
+        let currentTemplate = 'classic';
+        let parsedResume = null;
+        let zoomLevel = 1.0;
+
+        // Template selection
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                currentTemplate = card.dataset.template;
+                if (parsedResume) {
+                    renderPreview(parsedResume);
+                }
+            });
+        });
+
+        // Smart resume parser - captures EVERYTHING
+        function parseResume(text) {
+            const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l);
+            const resume = {
+                name: '',
+                contact: '',
+                summary: [],
+                experience: [],
+                skills: [],
+                certifications: [],
+                education: [],
+                projects: [],
+                awards: [],
+                other: []
+            };
+
+            let currentSection = null;
+            let currentJob = null;
+            let currentProject = null;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const upper = line.toUpperCase();
+                const nextLine = i + 1 < lines.length ? lines[i + 1] : '';
+
+                // Extract name (first substantial line)
+                if (!resume.name && !line.includes('@') && !line.includes('+1') && !line.startsWith('•')) {
+                    resume.name = line;
+                    continue;
+                }
+
+                // Extract contact (email, phone, linkedin)
+                if (!resume.contact && (line.includes('@') || line.includes('+1') || line.toLowerCase().includes('linkedin'))) {
+                    resume.contact = line;
+                    continue;
+                }
+
+                // Section detection
+                if (upper === 'SUMMARY' || upper === 'PROFESSIONAL SUMMARY' || upper === 'PROFILE') {
+                    currentSection = 'summary';
+                    currentJob = null;
+                    currentProject = null;
+                    continue;
+                }
+                if (upper === 'EXPERIENCE' || upper === 'WORK EXPERIENCE' || upper === 'PROFESSIONAL EXPERIENCE' || upper === 'EMPLOYMENT HISTORY') {
+                    currentSection = 'experience';
+                    currentJob = null;
+                    currentProject = null;
+                    continue;
+                }
+                if (upper === 'SKILLS' || upper === 'TECHNICAL SKILLS' || upper === 'CORE COMPETENCIES') {
+                    currentSection = 'skills';
+                    currentJob = null;
+                    currentProject = null;
+                    continue;
+                }
+                if (upper === 'CERTIFICATIONS' || upper === 'CERTIFICATES' || upper === 'LICENSES') {
+                    currentSection = 'certifications';
+                    currentJob = null;
+                    currentProject = null;
+                    continue;
+                }
+                if (upper === 'EDUCATION' || upper === 'ACADEMIC BACKGROUND') {
+                    currentSection = 'education';
+                    currentJob = null;
+                    currentProject = null;
+                    continue;
+                }
+                if (upper === 'PROJECTS' || upper === 'KEY PROJECTS') {
+                    currentSection = 'projects';
+                    currentJob = null;
+                    currentProject = null;
+                    continue;
+                }
+                if (upper === 'AWARDS' || upper === 'HONORS' || upper === 'ACHIEVEMENTS') {
+                    currentSection = 'awards';
+                    currentJob = null;
+                    currentProject = null;
+                    continue;
+                }
+
+                // Parse based on current section
+                if (currentSection === 'summary') {
+                    if (!line.startsWith('•')) {
+                        resume.summary.push(line);
+                    }
+                }
+
+                if (currentSection === 'experience') {
+                    // Detect job header (has — or | separator)
+                    if ((line.includes('—') || line.includes('|')) && !line.startsWith('•')) {
+                        if (currentJob) {
+                            resume.experience.push(currentJob);
+                        }
+                        currentJob = {
+                            raw: line,
+                            title: '',
+                            bullets: []
+                        };
+                        // Check if next line is job title
+                        if (nextLine && !nextLine.startsWith('•') && !nextLine.includes('—') && !nextLine.includes('|')) {
+                            currentJob.title = nextLine;
+                            i++; // Skip next line
+                        }
+                    }
+                    // Bullet points
+                    else if (line.startsWith('•') && currentJob) {
+                        currentJob.bullets.push(line.substring(1).trim());
+                    }
+                    // Catch orphan bullets (no job header above)
+                    else if (line.startsWith('•') && !currentJob) {
+                        resume.other.push(line);
+                    }
+                }
+
+                if (currentSection === 'skills') {
+                    if (line.includes(':')) {
+                        const [cat, items] = line.split(':');
+                        resume.skills.push({ category: cat.trim(), items: items.trim() });
+                    } else if (!line.startsWith('•')) {
+                        resume.skills.push({ category: '', items: line });
+                    }
+                }
+
+                if (currentSection === 'certifications') {
+                    if (line.startsWith('•') || line.startsWith('-')) {
+                        resume.certifications.push(line.replace(/^[•-]\s*/, ''));
+                    } else if (!upper.includes('CERTIFICATION')) {
+                        resume.certifications.push(line);
+                    }
+                }
+
+                if (currentSection === 'education') {
+                    if (!upper.includes('EDUCATION')) {
+                        resume.education.push(line);
+                    }
+                }
+
+                if (currentSection === 'projects') {
+                    if (!line.startsWith('•')) {
+                        if (currentProject) {
+                            resume.projects.push(currentProject);
+                        }
+                        currentProject = { name: line, bullets: [] };
+                    } else if (currentProject) {
+                        currentProject.bullets.push(line.substring(1).trim());
+                    }
+                }
+
+                if (currentSection === 'awards') {
+                    if (line.startsWith('•') || line.startsWith('-')) {
+                        resume.awards.push(line.replace(/^[•-]\s*/, ''));
+                    } else {
+                        resume.awards.push(line);
+                    }
+                }
+            }
+
+            // Push last items
+            if (currentJob) resume.experience.push(currentJob);
+            if (currentProject) resume.projects.push(currentProject);
+
+            return resume;
+        }
+
+        // Render preview based on selected template
+        function renderPreview(resume) {
+            const templates = {
+                classic: generateClassicTemplate,
+                modern: generateModernTemplate,
+                executive: generateExecutiveTemplate,
+                minimal: generateMinimalTemplate,
+                creative: generateCreativeTemplate
+            };
+
+            const html = templates[currentTemplate](resume);
+            document.getElementById('resume-preview').innerHTML = html;
+
+            // Update stats
+            const text = document.getElementById('resume-input').value;
+            document.getElementById('word-count').textContent = text.split(/\s+/).filter(w => w).length;
+            
+            let sectionCount = 0;
+            if (resume.summary.length) sectionCount++;
+            if (resume.experience.length) sectionCount++;
+            if (resume.skills.length) sectionCount++;
+            if (resume.certifications.length) sectionCount++;
+            if (resume.education.length) sectionCount++;
+            if (resume.projects.length) sectionCount++;
+            if (resume.awards.length) sectionCount++;
+            document.getElementById('section-count').textContent = sectionCount;
+
+            let bulletCount = 0;
+            resume.experience.forEach(job => bulletCount += job.bullets.length);
+            resume.projects.forEach(proj => bulletCount += proj.bullets.length);
+            document.getElementById('bullet-count').textContent = bulletCount;
+        }
+
+        function generateClassicTemplate(r) {
+            let html = `
+                <div style="text-align: center; padding-bottom: 12pt; border-bottom: 3pt solid #2563eb; margin-bottom: 12pt;">
+                    <div style="font-size: 24pt; font-weight: 700; color: #1e293b; margin-bottom: 6pt;">${r.name || 'Your Name'}</div>
+                    <div style="font-size: 10pt; color: #64748b;">${r.contact || 'contact@email.com'}</div>
+                </div>
+            `;
+
+            if (r.summary.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #2563eb;">Professional Summary</div>`;
+                r.summary.forEach(s => {
+                    html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt; line-height: 1.4;">${s}</div>`;
+                });
+            }
+
+            if (r.experience.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #2563eb;">Professional Experience</div>`;
+                r.experience.forEach(job => {
+                    html += `<div style="margin: 8pt 0;">`;
+                    html += `<div style="font-weight: 700; color: #1e293b; font-size: 10pt;">${job.raw}</div>`;
+                    if (job.title) {
+                        html += `<div style="font-style: italic; color: #475569; font-size: 10pt; margin-top: 2pt;">${job.title}</div>`;
+                    }
+                    if (job.bullets.length) {
+                        job.bullets.forEach(b => {
+                            html += `<div style="margin: 3pt 0 3pt 12pt; font-size: 10pt; color: #334155; line-height: 1.4;">• ${b}</div>`;
+                        });
+                    }
+                    html += `</div>`;
+                });
+            }
+
+            if (r.skills.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #2563eb;">Technical Skills</div>`;
+                r.skills.forEach(s => {
+                    html += `<div style="margin: 4pt 0; font-size: 10pt;">`;
+                    if (s.category) {
+                        html += `<span style="font-weight: 600; color: #1e293b;">${s.category}:</span> `;
+                    }
+                    html += `<span style="color: #334155;">${s.items}</span>`;
+                    html += `</div>`;
+                });
+            }
+
+            if (r.certifications.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #2563eb;">Certifications</div>`;
+                r.certifications.forEach(c => {
+                    html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">• ${c}</div>`;
+                });
+            }
+
+            if (r.education.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #2563eb;">Education</div>`;
+                r.education.forEach(e => {
+                    html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">${e}</div>`;
+                });
+            }
+
+            if (r.projects.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #2563eb;">Projects</div>`;
+                r.projects.forEach(p => {
+                    html += `<div style="font-weight: 600; color: #1e293b; font-size: 10pt; margin-top: 6pt;">${p.name}</div>`;
+                    p.bullets.forEach(b => {
+                        html += `<div style="margin: 3pt 0 3pt 12pt; font-size: 10pt; color: #334155; line-height: 1.4;">• ${b}</div>`;
+                    });
+                });
+            }
+
+            if (r.awards.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #2563eb;">Awards & Honors</div>`;
+                r.awards.forEach(a => {
+                    html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">• ${a}</div>`;
+                });
+            }
+
+            return html;
+        }
+
+        function generateModernTemplate(r) {
+            let html = `
+                <div style="display: flex; justify-content: space-between; align-items: start; padding-bottom: 12pt; border-bottom: 2pt solid #059669; margin-bottom: 12pt;">
+                    <div>
+                        <div style="font-size: 22pt; font-weight: 700; color: #1e293b;">${r.name || 'Your Name'}</div>
+                        <div style="font-size: 10pt; color: #059669; margin-top: 2pt;">Professional</div>
+                    </div>
+                    <div style="text-align: right; font-size: 9pt; color: #64748b;">
+                        ${r.contact ? r.contact.split('|').map(c => c.trim()).join('<br>') : 'contact@email.com'}
+                    </div>
+                </div>
+            `;
+
+            if (r.summary.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #059669;">Professional Summary</div>`;
+                r.summary.forEach(s => {
+                    html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt; line-height: 1.4;">${s}</div>`;
+                });
+            }
+
+            if (r.experience.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #059669;">Experience</div>`;
+                r.experience.forEach(job => {
+                    html += `<div style="margin: 8pt 0;">`;
+                    html += `<div style="font-weight: 700; color: #1e293b; font-size: 10pt;">${job.raw}</div>`;
+                    if (job.title) html += `<div style="font-style: italic; color: #475569; font-size: 10pt; margin-top: 2pt;">${job.title}</div>`;
+                    job.bullets.forEach(b => {
+                        html += `<div style="margin: 3pt 0 3pt 12pt; font-size: 10pt; color: #334155; line-height: 1.4;">• ${b}</div>`;
+                    });
+                    html += `</div>`;
+                });
+            }
+
+            if (r.skills.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #059669;">Skills</div>`;
+                r.skills.forEach(s => {
+                    html += `<div style="margin: 4pt 0; font-size: 10pt;">`;
+                    if (s.category) html += `<span style="font-weight: 600; color: #1e293b;">${s.category}:</span> `;
+                    html += `<span style="color: #334155;">${s.items}</span></div>`;
+                });
+            }
+
+            if (r.certifications.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #059669;">Certifications</div>`;
+                r.certifications.forEach(c => html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">• ${c}</div>`);
+            }
+
+            if (r.education.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #059669;">Education</div>`;
+                r.education.forEach(e => html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">${e}</div>`);
+            }
+
+            return html;
+        }
+
+        function generateExecutiveTemplate(r) {
+            let html = `
+                <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white; padding: 16pt; margin: -12pt -12pt 16pt -12pt;">
+                    <div style="font-size: 24pt; font-weight: 700; margin-bottom: 6pt;">${r.name || 'Your Name'}</div>
+                    <div style="font-size: 10pt; opacity: 0.9;">${r.contact || 'contact@email.com'}</div>
+                </div>
+            `;
+
+            if (r.summary.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #1e293b;">Executive Summary</div>`;
+                r.summary.forEach(s => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt; line-height: 1.4;">${s}</div>`);
+            }
+
+            if (r.experience.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #1e293b;">Leadership Experience</div>`;
+                r.experience.forEach(job => {
+                    html += `<div style="margin: 8pt 0;">`;
+                    html += `<div style="font-weight: 700; color: #1e293b; font-size: 10pt;">${job.raw}</div>`;
+                    if (job.title) html += `<div style="font-style: italic; color: #475569; font-size: 10pt; margin-top: 2pt;">${job.title}</div>`;
+                    job.bullets.forEach(b => html += `<div style="margin: 3pt 0 3pt 12pt; font-size: 10pt; color: #334155; line-height: 1.4;">• ${b}</div>`);
+                    html += `</div>`;
+                });
+            }
+
+            if (r.skills.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #1e293b;">Core Competencies</div>`;
+                r.skills.forEach(s => {
+                    html += `<div style="margin: 4pt 0; font-size: 10pt;">`;
+                    if (s.category) html += `<span style="font-weight: 600; color: #1e293b;">${s.category}:</span> `;
+                    html += `<span style="color: #334155;">${s.items}</span></div>`;
+                });
+            }
+
+            if (r.certifications.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #1e293b;">Professional Certifications</div>`;
+                r.certifications.forEach(c => html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">• ${c}</div>`);
+            }
+
+            if (r.education.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #1e293b;">Education</div>`;
+                r.education.forEach(e => html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">${e}</div>`);
+            }
+
+            return html;
+        }
+
+        function generateMinimalTemplate(r) {
+            let html = `
+                <div style="border-left: 6pt solid #dc2626; padding-left: 12pt; margin-bottom: 16pt;">
+                    <div style="font-size: 22pt; font-weight: 700; color: #1e293b; margin-bottom: 4pt;">${r.name || 'Your Name'}</div>
+                    <div style="font-size: 10pt; color: #64748b;">${r.contact ? r.contact.replace(/\|/g, '•') : 'contact@email.com'}</div>
+                </div>
+            `;
+
+            if (r.summary.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #dc2626;">About</div>`;
+                r.summary.forEach(s => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt; line-height: 1.4;">${s}</div>`);
+            }
+
+            if (r.experience.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #dc2626;">Experience</div>`;
+                r.experience.forEach(job => {
+                    html += `<div style="margin: 8pt 0;">`;
+                    html += `<div style="font-weight: 700; color: #1e293b; font-size: 10pt;">${job.raw}</div>`;
+                    if (job.title) html += `<div style="font-style: italic; color: #475569; font-size: 10pt; margin-top: 2pt;">${job.title}</div>`;
+                    job.bullets.forEach(b => html += `<div style="margin: 3pt 0 3pt 12pt; font-size: 10pt; color: #334155; line-height: 1.4;">• ${b}</div>`);
+                    html += `</div>`;
+                });
+            }
+
+            if (r.skills.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #dc2626;">Skills</div>`;
+                r.skills.forEach(s => {
+                    html += `<div style="margin: 4pt 0; font-size: 10pt;">`;
+                    if (s.category) html += `<span style="font-weight: 600; color: #1e293b;">${s.category}:</span> `;
+                    html += `<span style="color: #334155;">${s.items}</span></div>`;
+                });
+            }
+
+            if (r.certifications.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #dc2626;">Certifications</div>`;
+                r.certifications.forEach(c => html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">• ${c}</div>`);
+            }
+
+            if (r.education.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #dc2626;">Education</div>`;
+                r.education.forEach(e => html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">${e}</div>`);
+            }
+
+            return html;
+        }
+
+        function generateCreativeTemplate(r) {
+            let html = `
+                <div style="text-align: center; margin-bottom: 16pt;">
+                    <div style="font-size: 28pt; font-weight: 700; color: #7c3aed; margin-bottom: 4pt; letter-spacing: 2pt;">${r.name ? r.name.toUpperCase() : 'YOUR NAME'}</div>
+                    <div style="font-size: 10pt; color: #64748b;">${r.contact || 'contact@email.com'}</div>
+                    <div style="font-size: 10pt; color: #7c3aed; margin-top: 6pt;">★ Professional ★</div>
+                </div>
+            `;
+
+            if (r.summary.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #7c3aed;">Profile</div>`;
+                r.summary.forEach(s => html += `<div style="font-size: 10pt; color: #334155; margin-bottom: 4pt; line-height: 1.4;">${s}</div>`);
+            }
+
+            if (r.experience.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #7c3aed;">Experience Highlights</div>`;
+                r.experience.forEach(job => {
+                    html += `<div style="margin: 8pt 0;">`;
+                    html += `<div style="font-weight: 700; color: #1e293b; font-size: 10pt;">${job.raw}</div>`;
+                    if (job.title) html += `<div style="font-style: italic; color: #475569; font-size: 10pt; margin-top: 2pt;">${job.title}</div>`;
+                    job.bullets.forEach(b => html += `<div style="margin: 3pt 0 3pt 12pt; font-size: 10pt; color: #334155; line-height: 1.4;">• ${b}</div>`);
+                    html += `</div>`;
+                });
+            }
+
+            if (r.skills.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #7c3aed;">Expertise</div>`;
+                r.skills.forEach(s => {
+                    html += `<div style="margin: 4pt 0; font-size: 10pt;">`;
+                    if (s.category) html += `<span style="font-weight: 600; color: #1e293b;">${s.category}:</span> `;
+                    html += `<span style="color: #334155;">${s.items}</span></div>`;
+                });
+            }
+
+            if (r.certifications.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #7c3aed;">Credentials</div>`;
+                r.certifications.forEach(c => html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">★ ${c}</div>`);
+            }
+
+            if (r.education.length) {
+                html += `<div style="font-size: 11pt; font-weight: 700; color: #1e293b; text-transform: uppercase; margin: 12pt 0 6pt 0; padding-bottom: 4pt; border-bottom: 2pt solid #7c3aed;">Education</div>`;
+                r.education.forEach(e => html += `<div style="font-size: 10pt; color: #334155; margin: 3pt 0;">${e}</div>`);
+            }
+
+            return html;
+        }
+
+        function formatResume() {
+            const input = document.getElementById('resume-input').value;
+            if (!input.trim()) {
+                showToast('Please paste resume text first!', 'error');
+                return;
+            }
+
+            const btn = document.querySelector('button[onclick="formatResume()"]');
+            btn.classList.add('loading');
+
+            setTimeout(() => {
+                parsedResume = parseResume(input);
+                renderPreview(parsedResume);
+                btn.classList.remove('loading');
+                showToast('Resume formatted successfully!');
+            }, 600);
+        }
+
+        function clearAll() {
+            document.getElementById('resume-input').value = '';
+            document.getElementById('resume-preview').innerHTML = `
+                <div class="empty-preview">
+                    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    <p>Your formatted resume will appear here</p>
+                </div>
+            `;
+            parsedResume = null;
+            document.getElementById('word-count').textContent = '0';
+            document.getElementById('section-count').textContent = '0';
+            document.getElementById('bullet-count').textContent = '0';
+            showToast('Cleared!');
+        }
+
+        function zoom(direction) {
+            const preview = document.getElementById('resume-preview');
+            if (direction === 'in') {
+                zoomLevel = Math.min(1.5, zoomLevel + 0.1);
+            } else {
+                zoomLevel = Math.max(0.5, zoomLevel - 0.1);
+            }
+            preview.style.transform = `scale(${zoomLevel})`;
+            document.getElementById('zoom-level').textContent = Math.round(zoomLevel * 100) + '%';
+        }
+
+        async function downloadDOCX() {
+            if (!parsedResume) {
+                showToast('Please format resume first!', 'error');
+                return;
+            }
+
+            const btn = document.querySelector('button[onclick="downloadDOCX()"]');
+            btn.classList.add('loading');
+
+            try {
+                const response = await fetch('/generate-docx', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        resume: parsedResume,
+                        template: currentTemplate
+                    })
+                });
+
+                if (!response.ok) throw new Error('Generation failed');
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${parsedResume.name || 'Resume'}_${currentTemplate}.docx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                btn.classList.remove('loading');
+                showToast('DOCX downloaded successfully!');
+            } catch (error) {
+                btn.classList.remove('loading');
+                showToast('Download failed. Try again!', 'error');
+            }
+        }
+
+        function copyHTML() {
+            const preview = document.getElementById('resume-preview');
+            if (!preview.querySelector('div[style*="font-size"]')) {
+                showToast('Please format resume first!', 'error');
+                return;
+            }
+
+            const html = preview.innerHTML;
+            navigator.clipboard.writeText(html).then(() => {
+                showToast('HTML copied to clipboard!');
+            });
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+            toast.className = 'toast show' + (type === 'error' ? ' error' : '');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Auto-save to localStorage
+        document.getElementById('resume-input').addEventListener('input', (e) => {
+            localStorage.setItem('resume-draft', e.target.value);
+        });
+
+        // Load from localStorage
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('resume-draft');
+            if (saved) {
+                document.getElementById('resume-input').value = saved;
+            }
+        });
+    </script>
+</body>
+</html>
