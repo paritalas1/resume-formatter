@@ -1,10 +1,10 @@
 const express = require('express');
-const { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle, LevelFormat } = require('docx');
+const { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle, LevelFormat, TabStopType, TabStopPosition } = require('docx');
 const path = require('path');
 const fs = require('fs');
 
 const app = express();
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
 app.use(express.static(__dirname));
 
 // Template color schemes
@@ -19,6 +19,19 @@ const TEMPLATES = {
 app.post('/generate-docx', async (req, res) => {
     try {
         const { resume, template } = req.body;
+        
+        // Log what we received for debugging
+        console.log('\n📥 Received resume data:');
+        console.log('Name:', resume.name);
+        console.log('Contact:', resume.contact);
+        console.log('Summary lines:', resume.summary?.length || 0);
+        console.log('Experience entries:', resume.experience?.length || 0);
+        console.log('Skills entries:', resume.skills?.length || 0);
+        console.log('Certifications:', resume.certifications?.length || 0);
+        console.log('Education entries:', resume.education?.length || 0);
+        console.log('Projects:', resume.projects?.length || 0);
+        console.log('Awards:', resume.awards?.length || 0);
+        
         const templateConfig = TEMPLATES[template] || TEMPLATES.classic;
         
         const doc = createResumeDocument(resume, templateConfig);
@@ -27,9 +40,11 @@ app.post('/generate-docx', async (req, res) => {
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
         res.setHeader('Content-Disposition', `attachment; filename="${resume.name || 'Resume'}_${templateConfig.name}.docx"`);
         res.send(buffer);
+        
+        console.log('✅ DOCX generated successfully\n');
     } catch (error) {
-        console.error('Error generating DOCX:', error);
-        res.status(500).json({ error: 'Failed to generate document' });
+        console.error('❌ Error generating DOCX:', error);
+        res.status(500).json({ error: 'Failed to generate document', details: error.message });
     }
 });
 
@@ -37,157 +52,192 @@ function createResumeDocument(resume, config) {
     const sections = [];
     const color = config.color;
 
-    // Header
+    console.log('\n🔨 Building DOCX sections...');
+
+    // HEADER - Name
     if (resume.name) {
+        console.log('✓ Adding name');
         sections.push(
             new Paragraph({
-                children: [new TextRun({ text: resume.name, bold: true, size: 32, color: '1e293b' })],
+                children: [new TextRun({ text: resume.name, bold: true, size: 32, color: '1e293b', font: 'Calibri' })],
                 alignment: AlignmentType.CENTER,
                 spacing: { after: 60 }
             })
         );
     }
 
+    // HEADER - Contact
     if (resume.contact) {
+        console.log('✓ Adding contact');
         sections.push(
             new Paragraph({
-                children: [new TextRun({ text: resume.contact, size: 20, color: '64748b' })],
+                children: [new TextRun({ text: resume.contact, size: 20, color: '64748b', font: 'Calibri' })],
                 alignment: AlignmentType.CENTER,
-                spacing: { after: 120 },
+                spacing: { after: 160 },
                 border: { bottom: { style: BorderStyle.SINGLE, size: 18, color: color, space: 8 } }
             })
         );
     }
 
-    // Summary
+    // PROFESSIONAL SUMMARY
     if (resume.summary && resume.summary.length > 0) {
+        console.log(`✓ Adding summary (${resume.summary.length} lines)`);
         sections.push(createSectionHeader('PROFESSIONAL SUMMARY', color));
         resume.summary.forEach(line => {
             sections.push(
                 new Paragraph({
-                    children: [new TextRun({ text: line, size: 20, color: '334155' })],
+                    children: [new TextRun({ text: line, size: 20, color: '334155', font: 'Calibri' })],
+                    spacing: { after: 100 },
+                    alignment: AlignmentType.LEFT
+                })
+            );
+        });
+    }
+
+    // EDUCATION (move up before experience for this format)
+    if (resume.education && resume.education.length > 0) {
+        console.log(`✓ Adding education (${resume.education.length} entries)`);
+        sections.push(createSectionHeader('EDUCATION', color));
+        resume.education.forEach(edu => {
+            sections.push(
+                new Paragraph({
+                    children: [new TextRun({ text: edu, size: 20, color: '334155', font: 'Calibri' })],
                     spacing: { after: 80 }
                 })
             );
         });
     }
 
-    // Experience
-    if (resume.experience && resume.experience.length > 0) {
-        sections.push(createSectionHeader('PROFESSIONAL EXPERIENCE', color));
-        resume.experience.forEach(job => {
-            // Job header
-            sections.push(
-                new Paragraph({
-                    children: [new TextRun({ text: job.raw, bold: true, size: 20, color: '1e293b' })],
-                    spacing: { before: 100, after: 40 }
-                })
-            );
-            
-            // Job title
-            if (job.title) {
-                sections.push(
-                    new Paragraph({
-                        children: [new TextRun({ text: job.title, italics: true, size: 20, color: '475569' })],
-                        spacing: { after: 60 }
-                    })
-                );
-            }
-
-            // Bullets
-            job.bullets.forEach(bullet => {
-                sections.push(
-                    new Paragraph({
-                        children: [new TextRun({ text: bullet, size: 20, color: '334155' })],
-                        numbering: { reference: 'bullets', level: 0 },
-                        spacing: { after: 60 }
-                    })
-                );
-            });
-        });
-    }
-
-    // Skills
+    // TECHNICAL SKILLS
     if (resume.skills && resume.skills.length > 0) {
+        console.log(`✓ Adding skills (${resume.skills.length} categories)`);
         sections.push(createSectionHeader('TECHNICAL SKILLS', color));
         resume.skills.forEach(skill => {
             const children = [];
             if (skill.category) {
-                children.push(new TextRun({ text: skill.category + ': ', bold: true, size: 20, color: '1e293b' }));
+                children.push(new TextRun({ text: skill.category + ': ', bold: true, size: 20, color: '1e293b', font: 'Calibri' }));
             }
-            children.push(new TextRun({ text: skill.items, size: 20, color: '334155' }));
+            children.push(new TextRun({ text: skill.items, size: 20, color: '334155', font: 'Calibri' }));
             
             sections.push(
                 new Paragraph({
                     children: children,
-                    spacing: { after: 60 }
+                    spacing: { after: 100 }
                 })
             );
         });
     }
 
-    // Certifications
+    // PROFESSIONAL EXPERIENCE
+    if (resume.experience && resume.experience.length > 0) {
+        console.log(`✓ Adding experience (${resume.experience.length} jobs)`);
+        sections.push(createSectionHeader('PROFESSIONAL EXPERIENCE', color));
+        
+        resume.experience.forEach((job, idx) => {
+            console.log(`  → Job ${idx + 1}: ${job.raw || 'Unknown'}`);
+            
+            // Parse job header (Company — Location | Dates)
+            const jobParts = job.raw.split(/[—|]/);
+            const company = jobParts[0]?.trim() || '';
+            const locationDates = jobParts.slice(1).join(' | ').trim();
+            
+            // Job header with company on left, dates on right
+            sections.push(
+                new Paragraph({
+                    children: [
+                        new TextRun({ text: job.title || 'Position', bold: true, size: 21, color: '1e293b', font: 'Calibri' }),
+                    ],
+                    spacing: { before: 140, after: 40 }
+                })
+            );
+            
+            sections.push(
+                new Paragraph({
+                    children: [
+                        new TextRun({ text: company, size: 20, color: '475569', font: 'Calibri', italics: true }),
+                        new TextRun({ text: '  ·  ', size: 20, color: '64748b', font: 'Calibri' }),
+                        new TextRun({ text: locationDates, size: 20, color: '64748b', font: 'Calibri' })
+                    ],
+                    spacing: { after: 80 }
+                })
+            );
+
+            // Bullets
+            if (job.bullets && job.bullets.length > 0) {
+                console.log(`    → ${job.bullets.length} bullets`);
+                job.bullets.forEach(bullet => {
+                    sections.push(
+                        new Paragraph({
+                            children: [new TextRun({ text: bullet, size: 20, color: '334155', font: 'Calibri' })],
+                            numbering: { reference: 'bullets', level: 0 },
+                            spacing: { after: 80 }
+                        })
+                    );
+                });
+            }
+        });
+    } else {
+        console.log('⚠️ WARNING: No experience data found!');
+    }
+
+    // CERTIFICATIONS & ACHIEVEMENTS
     if (resume.certifications && resume.certifications.length > 0) {
-        sections.push(createSectionHeader('CERTIFICATIONS', color));
+        console.log(`✓ Adding certifications (${resume.certifications.length} items)`);
+        sections.push(createSectionHeader('CERTIFICATIONS & ACHIEVEMENTS', color));
         resume.certifications.forEach(cert => {
             sections.push(
                 new Paragraph({
-                    children: [new TextRun({ text: cert, size: 20, color: '334155' })],
+                    children: [new TextRun({ text: cert, size: 20, color: '334155', font: 'Calibri' })],
                     numbering: { reference: 'bullets', level: 0 },
-                    spacing: { after: 60 }
+                    spacing: { after: 80 }
                 })
             );
         });
+    } else {
+        console.log('⚠️ WARNING: No certifications data found!');
     }
 
-    // Education
-    if (resume.education && resume.education.length > 0) {
-        sections.push(createSectionHeader('EDUCATION', color));
-        resume.education.forEach(edu => {
-            sections.push(
-                new Paragraph({
-                    children: [new TextRun({ text: edu, size: 20, color: '334155' })],
-                    spacing: { after: 60 }
-                })
-            );
-        });
-    }
-
-    // Projects
+    // PROJECTS
     if (resume.projects && resume.projects.length > 0) {
+        console.log(`✓ Adding projects (${resume.projects.length} items)`);
         sections.push(createSectionHeader('PROJECTS', color));
         resume.projects.forEach(project => {
             sections.push(
                 new Paragraph({
-                    children: [new TextRun({ text: project.name, bold: true, size: 20, color: '1e293b' })],
-                    spacing: { before: 80, after: 40 }
+                    children: [new TextRun({ text: project.name, bold: true, size: 20, color: '1e293b', font: 'Calibri' })],
+                    spacing: { before: 100, after: 60 }
                 })
             );
-            project.bullets.forEach(bullet => {
-                sections.push(
-                    new Paragraph({
-                        children: [new TextRun({ text: bullet, size: 20, color: '334155' })],
-                        numbering: { reference: 'bullets', level: 0 },
-                        spacing: { after: 60 }
-                    })
-                );
-            });
+            if (project.bullets && project.bullets.length > 0) {
+                project.bullets.forEach(bullet => {
+                    sections.push(
+                        new Paragraph({
+                            children: [new TextRun({ text: bullet, size: 20, color: '334155', font: 'Calibri' })],
+                            numbering: { reference: 'bullets', level: 0 },
+                            spacing: { after: 80 }
+                        })
+                    );
+                });
+            }
         });
     }
 
-    // Awards
+    // AWARDS
     if (resume.awards && resume.awards.length > 0) {
+        console.log(`✓ Adding awards (${resume.awards.length} items)`);
         sections.push(createSectionHeader('AWARDS & HONORS', color));
         resume.awards.forEach(award => {
             sections.push(
                 new Paragraph({
-                    children: [new TextRun({ text: award, size: 20, color: '334155' })],
+                    children: [new TextRun({ text: award, size: 20, color: '334155', font: 'Calibri' })],
                     numbering: { reference: 'bullets', level: 0 },
-                    spacing: { after: 60 }
+                    spacing: { after: 80 }
                 })
             );
         });
     }
+
+    console.log(`✅ Total sections created: ${sections.length}\n`);
 
     return new Document({
         numbering: {
@@ -224,8 +274,8 @@ function createResumeDocument(resume, config) {
 
 function createSectionHeader(text, color) {
     return new Paragraph({
-        children: [new TextRun({ text, bold: true, size: 22, color: '1e293b' })],
-        spacing: { before: 240, after: 120 },
+        children: [new TextRun({ text, bold: true, size: 22, color: '1e293b', font: 'Calibri' })],
+        spacing: { before: 280, after: 140 },
         border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: color, space: 4 } }
     });
 }
