@@ -3,240 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS Resume Formatter</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>ATS Resume Formatter - Final Version</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --bg-primary: #0d0d12;
-            --bg-secondary: #16161d;
-            --bg-tertiary: #1e1e28;
-            --border-subtle: #2a2a38;
-            --text-primary: #e8e8f0;
-            --text-secondary: #a8a8c0;
-            --accent-blue: #5b8ff9;
-            --accent-green: #5ed9a1;
-        }
-
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
-
-        .top-bar {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 1.25rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo { display: flex; align-items: center; gap: 1rem; }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent-blue) 0%, #8b7fff 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .logo-text h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-blue) 0%, #8b7fff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-text p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .badge {
-            padding: 0.5rem 1rem;
-            background: rgba(94, 217, 161, 0.1);
-            border: 1px solid var(--accent-green);
-            border-radius: 8px;
-            font-size: 0.85rem;
-            color: var(--accent-green);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 450px 1fr;
-            gap: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .container { grid-template-columns: 1fr; }
-        }
-
-        .panel {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .panel-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .panel-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .panel-body { padding: 1.5rem; }
-
-        textarea {
-            width: 100%;
-            min-height: 500px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: 1.25rem;
-            color: var(--text-primary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            resize: vertical;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-        }
-
-        button {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--accent-blue) 0%, #8b7fff 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 1rem;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(91, 143, 249, 0.4);
-        }
-
-        button.success {
-            background: linear-gradient(135deg, var(--accent-green) 0%, #4bc98f 100%);
-        }
-
-        #preview {
-            background: white;
-            padding: 3rem 2.5rem;
-            border-radius: 8px;
-            color: #000;
-            font-family: Calibri, Arial, sans-serif;
-            min-height: 600px;
-        }
-
-        .debug {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--accent-green);
-            max-height: 300px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: linear-gradient(135deg, var(--accent-green) 0%, #4bc98f 100%);
-            color: #000;
-            padding: 1.25rem 1.75rem;
-            border-radius: 12px;
-            display: none;
-            font-weight: 600;
-            z-index: 1000;
-        }
-
-        .toast.show { display: block; }
-        .toast.error { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: #0a0a0f; color: #e0e0e5; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 400px 1fr; gap: 2rem; }
+        .panel { background: #1a1a20; border: 1px solid #2a2a35; border-radius: 12px; padding: 1.5rem; }
+        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #5b8ff9, #8b7fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        textarea { width: 100%; min-height: 400px; background: #0f0f15; border: 1px solid #2a2a35; border-radius: 8px; padding: 1rem; color: #e0e0e5; font-family: 'Courier New', monospace; font-size: 0.85rem; resize: vertical; }
+        button { width: 100%; padding: 0.875rem; background: linear-gradient(135deg, #5b8ff9, #8b7fff); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 0.75rem; }
+        button:hover { opacity: 0.9; }
+        button.success { background: linear-gradient(135deg, #5ed9a1, #4bc98f); }
+        .templates { display: grid; gap: 0.75rem; margin: 1rem 0; }
+        .template { background: #0f0f15; border: 2px solid #2a2a35; border-radius: 8px; padding: 0.75rem; cursor: pointer; }
+        .template.active { border-color: #5b8ff9; background: rgba(91, 143, 249, 0.1); }
+        .template-name { font-weight: 600; margin-bottom: 0.25rem; }
+        .template-desc { font-size: 0.8rem; color: #888; }
+        #preview { background: white; padding: 2.5rem; border-radius: 8px; color: #000; font-family: Calibri, Arial, sans-serif; min-height: 600px; }
+        .debug { background: #0f0f15; border: 1px solid #2a2a35; border-radius: 8px; padding: 0.75rem; margin-top: 0.75rem; font-family: 'Courier New', monospace; font-size: 0.7rem; color: #5ed9a1; max-height: 250px; overflow-y: auto; white-space: pre-wrap; }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="logo">
-            <div class="logo-icon">R</div>
-            <div class="logo-text">
-                <h1>Resume Forge</h1>
-                <p>Fixed Version • All Sections Work</p>
-            </div>
-        </div>
-        <div class="badge">✓ Debugged</div>
-    </div>
-
     <div class="container">
-        <div class="panel">
-            <div class="panel-header">
-                <div class="panel-title">📝 Paste Resume Text</div>
-            </div>
-            <div class="panel-body">
-                <textarea id="resume-input" placeholder="Paste your resume here..."></textarea>
-                <button onclick="formatResume()">🎨 Format Resume</button>
-                <button class="success" onclick="downloadDOCX()">📥 Download .docx</button>
+        <div>
+            <div class="panel">
+                <h1>Resume Formatter</h1>
+                <p style="font-size: 0.85rem; color: #888; margin-bottom: 1rem;">Paste resume → Format → Download</p>
+                
+                <div class="templates">
+                    <div class="template active" data-template="classic">
+                        <div class="template-name">Classic Blue</div>
+                        <div class="template-desc">Traditional ATS-friendly format</div>
+                    </div>
+                    <div class="template" data-template="modern">
+                        <div class="template-name">Modern Green</div>
+                        <div class="template-desc">Tech/startup focused</div>
+                    </div>
+                    <div class="template" data-template="executive">
+                        <div class="template-name">Executive</div>
+                        <div class="template-desc">Senior leadership</div>
+                    </div>
+                </div>
+
+                <textarea id="input" placeholder="Paste your resume here..."></textarea>
+                <button onclick="format()">Format Resume</button>
+                <button class="success" onclick="download()">Download .docx</button>
                 <div id="debug" class="debug"></div>
             </div>
         </div>
 
         <div class="panel">
-            <div class="panel-header">
-                <div class="panel-title">👁️ Preview</div>
-            </div>
-            <div class="panel-body">
-                <div id="preview">
-                    <p style="text-align: center; color: #999; padding: 4rem;">Your formatted resume will appear here</p>
-                </div>
-            </div>
+            <div id="preview" style="color: #999; text-align: center; padding: 4rem;">Preview will appear here</div>
         </div>
     </div>
 
-    <div class="toast" id="toast"></div>
-
     <script>
         let parsedResume = null;
+        let selectedTemplate = 'classic';
+
+        document.querySelectorAll('.template').forEach(t => {
+            t.addEventListener('click', () => {
+                document.querySelectorAll('.template').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                selectedTemplate = t.dataset.template;
+                if (parsedResume) renderPreview();
+            });
+        });
 
         function log(msg) {
-            const debug = document.getElementById('debug');
-            debug.innerHTML += msg + '\n';
+            document.getElementById('debug').textContent += msg + '\n';
             console.log(msg);
         }
 
         function parseResume(text) {
-            log('🔍 Starting parse...');
+            log('Starting parse...');
             const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l);
             
             const resume = {
@@ -249,99 +89,88 @@
                 education: []
             };
 
-            let currentSection = null;
-            let currentJob = null;
+            let section = null;
+            let job = null;
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 const upper = line.toUpperCase();
-                const next = i + 1 < lines.length ? lines[i + 1] : '';
+                const next = lines[i + 1] || '';
 
-                // Name (first non-contact line)
                 if (!resume.name && !line.includes('@') && !line.includes('+1') && !line.includes('·')) {
                     resume.name = line;
-                    log(`✓ Name: ${line}`);
+                    log(`Name: ${line}`);
                     continue;
                 }
 
-                // Contact
                 if (!resume.contact && (line.includes('@') || line.includes('+1') || line.includes('·'))) {
                     resume.contact = line;
-                    log(`✓ Contact: ${line}`);
+                    log(`Contact: ${line}`);
                     continue;
                 }
 
-                // Section headers
                 if (upper.includes('PROFESSIONAL SUMMARY') || upper === 'SUMMARY') {
-                    currentSection = 'summary';
-                    currentJob = null;
-                    log('📌 Section: SUMMARY');
+                    section = 'summary';
+                    job = null;
+                    log('Section: SUMMARY');
                     continue;
                 }
 
                 if (upper.includes('PROFESSIONAL EXPERIENCE') || upper === 'EXPERIENCE') {
-                    currentSection = 'experience';
-                    currentJob = null;
-                    log('📌 Section: EXPERIENCE');
+                    section = 'experience';
+                    job = null;
+                    log('Section: EXPERIENCE');
                     continue;
                 }
 
                 if (upper.includes('TECHNICAL SKILLS') || upper === 'SKILLS') {
-                    currentSection = 'skills';
-                    currentJob = null;
-                    log('📌 Section: SKILLS');
+                    section = 'skills';
+                    job = null;
+                    log('Section: SKILLS');
                     continue;
                 }
 
                 if (upper.includes('CERTIFICATIONS') || upper.includes('ACHIEVEMENTS')) {
-                    currentSection = 'certifications';
-                    currentJob = null;
-                    log('📌 Section: CERTIFICATIONS');
+                    section = 'certifications';
+                    job = null;
+                    log('Section: CERTIFICATIONS');
                     continue;
                 }
 
                 if (upper === 'EDUCATION') {
-                    currentSection = 'education';
-                    currentJob = null;
-                    log('📌 Section: EDUCATION');
+                    section = 'education';
+                    job = null;
+                    log('Section: EDUCATION');
                     continue;
                 }
 
-                // Parse content
-                if (currentSection === 'summary' && !line.startsWith('•')) {
+                if (section === 'summary' && !line.startsWith('•')) {
                     resume.summary.push(line);
                 }
 
-                if (currentSection === 'experience') {
-                    // Job title (before company line)
-                    if (!line.startsWith('•') && !line.includes('·') && !line.includes('|') && 
-                        next && (next.includes('·') || next.includes('|'))) {
-                        if (currentJob) {
-                            resume.experience.push(currentJob);
-                            log(`  ✓ Job: ${currentJob.title} (${currentJob.bullets.length} bullets)`);
+                if (section === 'experience') {
+                    const isJobTitle = !line.startsWith('•') && !line.includes('·') && !line.includes('|') && 
+                                      next && (next.includes('·') || next.includes('|'));
+                    
+                    if (isJobTitle) {
+                        if (job) {
+                            resume.experience.push(job);
+                            log(`  Job: ${job.title} (${job.bullets.length} bullets)`);
                         }
-                        currentJob = { title: line, raw: '', bullets: [] };
-                        log(`  → Title: ${line}`);
-                    }
-                    // Company/location/dates
-                    else if (currentJob && (line.includes('·') || line.includes('|')) && !line.startsWith('•')) {
-                        currentJob.raw = line;
-                        log(`    Raw: ${line}`);
-                    }
-                    // Bullet
-                    else if (line.startsWith('•') && currentJob) {
-                        currentJob.bullets.push(line.substring(1).trim());
+                        job = { title: line, raw: '', bullets: [] };
+                    } else if (job && (line.includes('·') || line.includes('|')) && !line.startsWith('•')) {
+                        job.raw = line;
+                    } else if (line.startsWith('•') && job) {
+                        job.bullets.push(line.substring(1).trim());
                     }
                 }
 
-                if (currentSection === 'skills') {
-                    if (line.includes(':')) {
-                        const [cat, items] = line.split(':');
-                        resume.skills.push({ category: cat.trim(), items: items.trim() });
-                    }
+                if (section === 'skills' && line.includes(':')) {
+                    const [cat, items] = line.split(':');
+                    resume.skills.push({ category: cat.trim(), items: items.trim() });
                 }
 
-                if (currentSection === 'certifications') {
+                if (section === 'certifications') {
                     if (line.startsWith('•')) {
                         resume.certifications.push(line.substring(1).trim());
                     } else if (!upper.includes('CERTIFICATION')) {
@@ -349,38 +178,22 @@
                     }
                 }
 
-                if (currentSection === 'education' && !upper.includes('EDUCATION')) {
+                if (section === 'education' && !upper.includes('EDUCATION')) {
                     resume.education.push(line);
                 }
             }
 
-            // Push last job
-            if (currentJob) {
-                resume.experience.push(currentJob);
-                log(`  ✓ Job: ${currentJob.title} (${currentJob.bullets.length} bullets)`);
+            if (job) {
+                resume.experience.push(job);
+                log(`  Job: ${job.title} (${job.bullets.length} bullets)`);
             }
 
-            log(`\n✅ Parse complete:`);
-            log(`   Summary: ${resume.summary.length}`);
-            log(`   Experience: ${resume.experience.length} jobs`);
-            log(`   Skills: ${resume.skills.length}`);
-            log(`   Certifications: ${resume.certifications.length}`);
-            log(`   Education: ${resume.education.length}`);
-
+            log(`\nComplete: ${resume.experience.length} jobs, ${resume.certifications.length} certs`);
             return resume;
         }
 
-        function formatResume() {
-            const text = document.getElementById('resume-input').value;
-            if (!text.trim()) {
-                showToast('Paste resume text first!', 'error');
-                return;
-            }
-
-            document.getElementById('debug').innerHTML = '';
-            parsedResume = parseResume(text);
-            
-            let html = '<div style="font-family: Calibri, Arial, sans-serif;">';
+        function renderPreview() {
+            let html = '<div style="font-family: Calibri;">';
             
             if (parsedResume.name) {
                 html += `<div style="text-align: center; font-size: 24pt; font-weight: 700; margin-bottom: 6pt;">${parsedResume.name}</div>`;
@@ -391,21 +204,17 @@
             }
 
             if (parsedResume.summary.length) {
-                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; margin-bottom: 6pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb;">PROFESSIONAL SUMMARY</div>`;
-                parsedResume.summary.forEach(s => {
-                    html += `<div style="font-size: 10pt; margin-bottom: 4pt; line-height: 1.4;">${s}</div>`;
-                });
+                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb; margin-bottom: 6pt;">PROFESSIONAL SUMMARY</div>`;
+                parsedResume.summary.forEach(s => html += `<div style="font-size: 10pt; margin-bottom: 4pt;">${s}</div>`);
             }
 
             if (parsedResume.education.length) {
-                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; margin-bottom: 6pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb;">EDUCATION</div>`;
-                parsedResume.education.forEach(e => {
-                    html += `<div style="font-size: 10pt; margin-bottom: 3pt;">${e}</div>`;
-                });
+                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb; margin-bottom: 6pt;">EDUCATION</div>`;
+                parsedResume.education.forEach(e => html += `<div style="font-size: 10pt; margin-bottom: 3pt;">${e}</div>`);
             }
 
             if (parsedResume.skills.length) {
-                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; margin-bottom: 6pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb;">TECHNICAL SKILLS</div>`;
+                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb; margin-bottom: 6pt;">TECHNICAL SKILLS</div>`;
                 parsedResume.skills.forEach(s => {
                     html += `<div style="font-size: 10pt; margin-bottom: 4pt;">`;
                     if (s.category) html += `<strong>${s.category}:</strong> `;
@@ -414,88 +223,69 @@
             }
 
             if (parsedResume.experience.length) {
-                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; margin-bottom: 6pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb;">PROFESSIONAL EXPERIENCE</div>`;
+                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb; margin-bottom: 6pt;">PROFESSIONAL EXPERIENCE</div>`;
                 parsedResume.experience.forEach(job => {
                     html += `<div style="margin-top: 8pt;">`;
                     html += `<div style="font-weight: 700; font-size: 10pt;">${job.title}</div>`;
                     html += `<div style="font-style: italic; font-size: 10pt; color: #666;">${job.raw}</div>`;
-                    job.bullets.forEach(b => {
-                        html += `<div style="margin-left: 12pt; margin-top: 3pt; font-size: 10pt;">• ${b}</div>`;
-                    });
+                    job.bullets.forEach(b => html += `<div style="margin-left: 12pt; margin-top: 3pt; font-size: 10pt;">• ${b}</div>`);
                     html += `</div>`;
                 });
             }
 
             if (parsedResume.certifications.length) {
-                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; margin-bottom: 6pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb;">CERTIFICATIONS & ACHIEVEMENTS</div>`;
-                parsedResume.certifications.forEach(c => {
-                    html += `<div style="font-size: 10pt; margin-top: 3pt;">• ${c}</div>`;
-                });
+                html += `<div style="font-size: 11pt; font-weight: 700; text-transform: uppercase; margin-top: 12pt; padding-bottom: 4pt; border-bottom: 2px solid #2563eb; margin-bottom: 6pt;">CERTIFICATIONS & ACHIEVEMENTS</div>`;
+                parsedResume.certifications.forEach(c => html += `<div style="font-size: 10pt; margin-top: 3pt;">• ${c}</div>`);
             }
 
             html += '</div>';
             document.getElementById('preview').innerHTML = html;
-            showToast('Preview generated!');
         }
 
-        async function downloadDOCX() {
-            if (!parsedResume) {
-                showToast('Format resume first!', 'error');
-                return;
-            }
+        function format() {
+            const text = document.getElementById('input').value;
+            if (!text.trim()) return alert('Paste resume text first');
+            
+            document.getElementById('debug').textContent = '';
+            parsedResume = parseResume(text);
+            renderPreview();
+        }
+
+        async function download() {
+            if (!parsedResume) return alert('Format resume first');
 
             try {
-                log('\n📤 Sending to server...');
-                log(`Experience jobs: ${parsedResume.experience.length}`);
-                log(`Certifications: ${parsedResume.certifications.length}`);
-
+                log('\nSending to server...');
                 const response = await fetch('/generate-docx', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        resume: parsedResume,
-                        template: 'classic'
-                    })
+                    body: JSON.stringify({ resume: parsedResume, template: selectedTemplate })
                 });
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.details || 'Server error');
-                }
+                if (!response.ok) throw new Error('Server error');
 
                 const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
+                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `${parsedResume.name || 'Resume'}_ATS.docx`;
-                document.body.appendChild(a);
+                a.download = `${parsedResume.name || 'Resume'}.docx`;
                 a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-
-                showToast('DOCX downloaded!');
-                log('✅ Download complete');
+                URL.revokeObjectURL(url);
+                
+                log('Download complete!');
             } catch (error) {
-                log(`❌ Error: ${error.message}`);
-                showToast('Download failed: ' + error.message, 'error');
+                log('Error: ' + error.message);
+                alert('Download failed: ' + error.message);
             }
         }
 
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.className = 'toast show' + (type === 'error' ? ' error' : '');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        // Auto-save
-        document.getElementById('resume-input').addEventListener('input', (e) => {
+        document.getElementById('input').addEventListener('input', e => {
             localStorage.setItem('resume-draft', e.target.value);
         });
 
         window.addEventListener('load', () => {
             const saved = localStorage.getItem('resume-draft');
-            if (saved) document.getElementById('resume-input').value = saved;
+            if (saved) document.getElementById('input').value = saved;
         });
     </script>
 </body>
